@@ -1,0 +1,14 @@
+# Tells the Git LFS client where this repo's LFS server is, without relying on
+# it being inferred from the clone's remote.
+#
+# Unity's Package Manager shallow-clones git dependencies, and its own docs note
+# that LFS-tracked files "aren't always fetched correctly" as a result — the
+# package can import placeholder pointer files instead of the real contents.
+# That is exactly what happened here: consumers got a 134-byte pointer where
+# FirebaseCppApp-*.bundle should be, and Unity failed to load it with
+# "slice is not valid mach-o file". Reproduced identically on two machines,
+# unaffected by `git lfs install` or by clearing every Unity cache.
+#
+# An explicit endpoint is Unity's recommended mitigation for package authors.
+[lfs]
+    url = https://github.com/Cosmic-Pulse/com.google.firebase.app.git/info/lfs
